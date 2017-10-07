@@ -1,0 +1,11 @@
+venv
+*.pyc
+staticfiles
+.env
+.DS_Store
+*~
+__pycache__
+myvenv
+db.sqlite3
+/static
+temp
