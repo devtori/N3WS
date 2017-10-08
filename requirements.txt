@@ -1,6 +1,10 @@
+beautifulsoup4==4.6.0
 dj-database-url==0.4.2
 Django==1.11.6
 gunicorn==19.7.1
+JPype1==0.6.2
+JPype1-py3==0.5.5.2
+konlpy==0.4.4
 psycopg2==2.7.3.1
 pytz==2017.2
 whitenoise==3.3.1

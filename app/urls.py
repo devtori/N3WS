@@ -3,5 +3,6 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^result/(\w+)$', views.test, name='test'),
+    url(r'^result/(\w+)$', views.result, name='result'),
+    url(r'^words/$', views.cloud, name='words'),
 ]

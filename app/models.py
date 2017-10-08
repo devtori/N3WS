@@ -8,9 +8,9 @@ class News(models.Model):
         verbose_name = "News"
         verbose_name_plural = "Newses"
 
-    num = models.IntegerField()
-    url = models.TextField()
-    content = models.TextField()
+    num = models.IntegerField(null=True, blank=True)
+    url = models.TextField(null=True, blank=True)
+    content = models.TextField(null=True, blank=True)
     keyword1 = models.CharField(max_length=30, default="", blank=True, null=True, verbose_name="키워드1")
     keyword2 = models.CharField(max_length=30, default="", blank=True, null=True, verbose_name="키워드2")
     keyword3 = models.CharField(max_length=30, default="", blank=True, null=True, verbose_name="키워드3")

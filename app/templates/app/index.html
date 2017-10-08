@@ -4,7 +4,21 @@
 
 
 <head>
-
+  <style>
+    svg > g > text {
+      cursor: pointer;
+      opacity: 0.6;
+    }
+    svg > g > text:hover {
+      opacity: 1;
+    }
+    svg > g > text:active {
+      opacity: 1;
+    }
+    svg > g > text:focus {
+      opacity: 1;
+    }
+  </style>
 
 
   <meta charset="UTF-8">
@@ -12,7 +26,7 @@
     {% load static %}
     <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="{% static 'd3.layout.cloud.js'%}"></script>
-    <title>N3WS 테스트</title>
+    <title>N3WS</title>
 </head>
 
 
@@ -37,10 +51,10 @@
               height = 300;
               //워드클라우드 창
           var fill = d3.scale.category20();
-          d3.csv("{% static 'words.csv'%}", function(d) {
+          d3.csv("/words/", function(d) {
                   return {
                       text: d.word,
-                      size: +d.freq / 80 * weight
+                      size: +d.freq * 100
                       //글씨 사이즈 : 숫자가 커질수록 글씨가 작아짐
                   }
               },
@@ -69,7 +83,7 @@
                           .attr("transform", function(d) {
                               return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
                           })
-                          .on("click", function(d) {window.open("https://n3ws.herokuapp.com/result/" + d.text);})
+                          .on("click", function(d) {window.open("/result/" + d.text);})
                           .text(function(d) { return d.text; });
                   }
               });
