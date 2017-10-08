@@ -4,21 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-    <link rel='stylesheet' href='style.css'>
-    <link rel='reset' href='reset.css'>
-    <link rel="shortcut icon" href="logo_kor.ico" type="image/x-icon">
-    <link rel="icon" href="logo_kor.ico" type="image/x-icon">
-    <title>헤드라인</title>
+    <title>N3WS</title>
 </head>
 
 <body>
     <!-- Headline을 표시할 부분 -->
     <div id="header">
         <div class="logo_title">
-            <h1><a href="index.html"><img src="logo_kor.png" alt="로고"> </a></h1>
+          <h1><font size="5">세상의 모든 세 줄 기사</font></h1>
         </div>
-        <div class="logo_subtitle">
-            <h2>세상의 모든 세 줄 기사</h2>
+
+        <div class="logo_png">
+          <img src="{% static 'logo.png'%}" width="200" height="122">
         </div>
     </div>
     <!-- 내용 표시할 main -->
