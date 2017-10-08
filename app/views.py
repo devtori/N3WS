@@ -4,4 +4,4 @@ def index(request):
     return render(request, 'app/index.html', {})
 
 def test(request, value):
-    return render(request, 'app/test.html', {})
+    return render(request, 'app/news_list.html', {})

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link rel='stylesheet' href='style.css'>
+    <link rel='reset' href='reset.css'>
+    <link rel="shortcut icon" href="logo_kor.ico" type="image/x-icon">
+    <link rel="icon" href="logo_kor.ico" type="image/x-icon">
+    <title>헤드라인</title>
+</head>
+
+<body>
+    <!-- Headline을 표시할 부분 -->
+    <div id="header">
+        <div class="logo_title">
+            <h1><a href="index.html"><img src="logo_kor.png" alt="로고"> </a></h1>
+        </div>
+        <div class="logo_subtitle">
+            <h2>세상의 모든 세 줄 기사</h2>
+        </div>
+    </div>
+    <!-- 내용 표시할 main -->
+    <div id="main">
+        <div class="display_keyword">
+            <h3><a href="#">keyword</a></h3>
+        </div>
+        <div class="content_space">
+            <div style="clear:both;">
+                <br />
+            </div>
+            <!-- 기사 나열 -->
+            <ul id="news_list_big">
+                {% for news in object_list %}
+                <ul class="news_list_small"><a href="{{news.url}}"></a>
+                    <li>news.sentence1 </li>
+                    <li>news.sentence2 </li>
+                    <li>news.sentence3 </li>
+                </ul>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <!-- 그외 잡다한거 -->
+    <div id="footer">
+        <p>이화여자대학교 컴퓨터공학과 졸업프로젝트 <a href="#">헤드라인</a></p>
+    </div>
+    <!-- 위로 가기 화살표
+     -->
+    <!-- <div id="uparrow" style="position: fixed; bottom:5px; left: 300px;">
+    <a href="#header"><img src="uparrow.png" alt="맨위로 올라가기" width="10%"></a>
+</div> -->
+</body>
+
+</html>
