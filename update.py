@@ -50,37 +50,64 @@ def get_link_from_news_title(page_num, URL, result_list, url_list):
 def get_text(URL, result_list):
     try :
         source_code_from_url = urllib.request.urlopen(URL)
+
     # handle if news been deleted
     except HTTPError as e:
         print(URL,"404 Page NotFound")
 
-
+    # if news exist
     else :
         soup = BeautifulSoup(source_code_from_url, 'lxml', from_encoding='utf-8')
         content_of_article = soup.select('div.article_txt')
         whole_article = ''
-        for item in content_of_article:
-            string_item = str(item.find_all(text=True))
-            whole_article += string_item
+
 
         # make article simple
-        split_article = whole_article.split('추천해요')
-        article_text_1 = str(split_article[0])
-        article_text_2 = str(article_text_1[7:])
-        if article_text_2:
-            if "크게보기" not in article_text_2:
-                if len(article_text_2) > 100:
+        for item in content_of_article:
+            string_item = item.find_all(text=True)
+
+            try:
+                string_item.remove('\n')
+                string_item.remove( '\n')
+            except :
+                pass
+
+            string_item[0]=string_item[0]+"."
+
+            real_content_num = 0
+            remove_string = ""
+            for i in range(0,len(string_item)) :
+                if "추천해요" in string_item[i] :
+                    real_content_num+= i
+                if "©" in string_item[i] :
+                    remove_string=string_item[i]
+                    real_content_num-= 1
+
+            try :
+                string_item.remove(remove_string)
+            except :
+                pass
+
+            if real_content_num!=0 :
+                whole_article = " ".join(string_item[:real_content_num -1])
+                whole_article = whole_article.replace("\n","")
+                whole_article = whole_article.replace("\r","")
+            else :
+                whole_article=""
+
+
+            whole_article = " ".join(string_item[:real_content_num -1])
+            whole_article = whole_article.replace("\n","")
+            whole_article = whole_article.replace("\r","")
+
+
+        # make article exception > photo news
+        if whole_article:
+            if "크게보기" not in whole_article:
+                if len(whole_article) > 100:
                     result_list.append(URL)
-
-                    # replace unnecessary words in article
-                    real_article = article_text_2.replace("\'", "")
-                    real_article = real_article.replace(",", "")
-                    real_article = real_article.replace("\\n", "")
-                    real_article = real_article.replace("\\r", "")
-
-                    result_list.append(real_article)
-
-                    keyword(real_article, result_list)
+                    result_list.append(whole_article)
+                    keyword(whole_article, result_list)
         result_list.clear()
 
 

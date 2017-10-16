@@ -86,6 +86,14 @@ def get_text(URL, result_list):
             except :
                 pass
 
+            if real_content_num!=0 :
+                whole_article = " ".join(string_item[:real_content_num -1])
+                whole_article = whole_article.replace("\n","")
+                whole_article = whole_article.replace("\r","")
+            else :
+                whole_article=""
+
+
             whole_article = " ".join(string_item[:real_content_num -1])
             whole_article = whole_article.replace("\n","")
             whole_article = whole_article.replace("\r","")
@@ -169,7 +177,7 @@ def keyword(article_text, result_list):
 
 # main func
 def main():
-    page_num = 500
+    page_num = 50
     URL = URL_BEFORE_PAGE_NUM + URL_AFTER_PAGE_NUM
     result_list = []
     get_link_from_news_title(page_num, URL, result_list)
