@@ -4,10 +4,11 @@
 
 
 <head>
+  <!-- 워드 클라우드 클릭 설정 -->
   <style>
     svg > g > text {
       cursor: pointer;
-      opacity: 0.6;
+      opacity: 0.7;
     }
     svg > g > text:hover {
       opacity: 1;
@@ -20,25 +21,28 @@
     }
   </style>
 
-
+<!-- 상단 및 css -->
   <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     {% load static %}
     <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="{% static 'd3.layout.cloud.js'%}"></script>
+    <link rel="shortcut icon" href="{% static 'toplogo.ico'%}" type="image/x-icon">
+    <link rel="icon" href="{% static 'toplogo.ico'%}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'style.css'%}">
+    <link rel="reset" href="{% static 'reset.css'%}">
     <title>N3WS</title>
 </head>
 
 
-<body style="background-color:#dedede; text-align:center">
-    <!-- Headline을 표시할 부분 -->
+<body >
+    <!-- 로고 -->
     <div id="header">
-        <div class="logo_title">
-          <h1><font size="5">세상의 모든 세 줄 기사</font></h1>
-        </div>
-
         <div class="logo_png">
           <img src="{% static 'logo.png'%}" width="200" height="122">
+        </div>
+        <div class="logo_title">
+          <h1><font size="5">세상의 모든 세 줄 기사</font></h1>
         </div>
     </div>
 
@@ -46,7 +50,7 @@
     <div id="main">
           <div id="cloud"></div>
           <script type="text/javascript">
-          var weight = 3, // change me
+          var weight = 3,
               width = 500,
               height = 300;
               //워드클라우드 창
@@ -83,21 +87,15 @@
                           .attr("transform", function(d) {
                               return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
                           })
-                          .on("click", function(d) {window.open("/result/" + d.text);})
+                          .on("click", function(d) {window.location = "/result/" + d.text;})
                           .text(function(d) { return d.text; });
                   }
               });
           </script>
       </div>
-
-    <!-- 그외 잡다한거 -->
-
+    <!-- 맨 아래 소속 -->
     <div id="footer">
-      <div style="position: fixed;
-      right: 10px;
-      bottom:0px;
-      ">
-        <p>이화여자대학교 컴퓨터공학과 졸업프로젝트 <a href="https://cse.ewha.ac.kr/">헤드라인</a></p>
+        <p>이화여자대학교 컴퓨터공학과 졸업프로젝트 <a href="http://cse.ewha.ac.kr/">헤드라인</a></p>
     </div>
 </body>
 

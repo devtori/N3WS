@@ -1,61 +1,67 @@
 <!DOCTYPE html>
 <html lang="ko">
 
+<!-- 링크 스타일 설정-->
+<style type="text/css">
+a:link {text-decoration: none; color: #000000;}
+a:visited {text-decoration: none; color: #000000;}
+a:active {text-decoration: none; color: #A52A2A;}
+a:hover {text-decoration: none; color: #A52A2A;}
+</style>
+
+
+<!-- 상단 및 css -->
 <head>
-    <meta charset="UTF-8">
+  <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     {% load static %}
+    <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="{% static 'd3.layout.cloud.js'%}"></script>
+    <link rel="shortcut icon" href="{% static 'toplogo.ico'%}" type="image/x-icon">
+    <link rel="icon" href="{% static 'toplogo.ico'%}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'style.css'%}">
+    <link rel="reset" href="{% static 'reset.css'%}">
     <title>N3WS</title>
 </head>
 
-<body style="background-color:#dedede;">
-    <!-- Headline을 표시할 부분 -->
-    <div align="center">
+<body>
+  <body link="#000000" vlink="#FFFFFF" alink="#FFFFFF">
+    <!-- 로고 -->
       <div id="header">
+        <div class="logo_png">
+          <a href = "/"><img src="{% static 'logo.png'%}" width="200" height="122"></a>
+        </div>
         <div class="logo_title">
           <h1><font size="5">세상의 모든 세 줄 기사</font></h1>
         </div>
-        <div class="logo_png">
-          <img src="{% static 'logo.png'%}" width="200" height="122">
-        </div>
     </div>
   </div>
+
     <!-- 내용 표시할 main -->
-    <div id="main">
-        <div class="display_keyword">
-          <div align="center">
-            <h3><a href="#">keyword</a></h3>
-          </div>
-        </div>
-        <div class="content_space">
-            <div style="clear:both;">
-                <br />
-            </div>
-            <!-- 기사 나열 -->
-            <ul id="news_list_big">
-                {% for news in object_list %}
-                <ul class="news_list_small"><a href="{{news.url}}"></a>
-                    <li>news.sentence1 </li>
-                    <li>news.sentence2 </li>
-                    <li>news.sentence3 </li>
-                </ul>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-    <!-- 그외 잡다한거 -->
+    <div id="main2">
+      <h3><font size="15" color="#707070">"{{value}}"</font></h3>
+      {% for cache in caches %}
+      <div>
+        <p><font size="6"><b>{{cache.num}}.</b></font></br></p>
+        <p><font size="3"><a href = "{{cache.url}}">
+          - {{cache.sentence1}}.></br>
+          - {{cache.sentence2}}.</br>
+          - {{cache.sentence3}}.</a></font></p>
+        </br>
+      </div>
+      {% endfor %}
+      </font>
+      </div>
+
+
+    <!-- 밑에 소속 표시 -->
     <div id="footer">
-      <div style="position: fixed;
-      right: 10px;
-      bottom:0px;
-      ">
-        <p>이화여자대학교 컴퓨터공학과 졸업프로젝트 <a href="https://cse.ewha.ac.kr/">헤드라인</a></p>
+        <p>이화여자대학교 컴퓨터공학과 졸업프로젝트 <a href="http://cse.ewha.ac.kr/">헤드라인</a></p>
     </div>
-    <!-- 위로 가기 화살표
-     -->
-    <!-- <div id="uparrow" style="position: fixed; bottom:5px; left: 300px;">
-    <a href="#header"><img src="uparrow.png" alt="맨위로 올라가기" width="10%"></a>
-</div> -->
+    <!-- 위로 가기 화살표 -->
+    <div class="uparrow" style="position: fixed; bottom:10px; right: -530px;">
+      <a href="#header" class="top"><img src="{% static 'uparrow.png'%}" alt="맨 위로 올라가기" width="10%"></a>
+    </div>
 </body>
 
 </html>

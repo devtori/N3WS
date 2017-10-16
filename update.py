@@ -1,15 +1,16 @@
 import sys
-import sqlite3
+from bs4 import BeautifulSoup
 import urllib.request
-from urllib.request import HTTPError
 from konlpy.tag import Twitter
 from collections import Counter
-from bs4 import BeautifulSoup
-
+import sqlite3
+import time
+from urllib.request import HTTPError
 
 import os
 import sys
 import django
+
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'test'))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'test.settings')
@@ -20,84 +21,66 @@ from app.models import *
 
 
 t = Twitter()
-
-
 # URL = URL_BEFORE_PAGE_NUM + list + URL_AFTER_PAGE_NUM
 URL_BEFORE_PAGE_NUM = "http://news.donga.com/List?p="  # list = (PAGE_NUM-1)*20 + 1
 URL_AFTER_PAGE_NUM = '&prod=news&ymd=&m=NP'
 
 
 # get article href from news list
-def get_link_from_news_title(page_num, URL, result_list):
+def get_link_from_news_title(page_num, URL, result_list, url_list):
     for i in range(page_num):
         current_page_num = 1 + (page_num-1-i) * 20
-        print(current_page_num)
         position = URL.index('=')
-        URL_with_page_num = URL[: position + 1] + str(current_page_num)+ URL[position + 1:]
+        URL_with_page_num = URL[: position + 1] + str(current_page_num) \
+                            + URL[position + 1:]
         source_code_from_URL = urllib.request.urlopen(URL_with_page_num)
         soup = BeautifulSoup(source_code_from_URL, 'lxml',
                              from_encoding='utf-8')
-
         for title in soup.find_all('div', 'rightList'):
             title_link = title.select('a')
             article_URL = title_link[0]['href']
-            get_text(article_URL, result_list)
+
+            if article_URL not in url_list :
+                Cache.objects.all().delete()
+                get_text(article_URL, result_list)
 
 
-# crawling news text
+
+# crawling news test
 def get_text(URL, result_list):
     try :
         source_code_from_url = urllib.request.urlopen(URL)
-
     # handle if news been deleted
     except HTTPError as e:
         print(URL,"404 Page NotFound")
 
-    # if news exist
+
     else :
         soup = BeautifulSoup(source_code_from_url, 'lxml', from_encoding='utf-8')
         content_of_article = soup.select('div.article_txt')
         whole_article = ''
-
+        for item in content_of_article:
+            string_item = str(item.find_all(text=True))
+            whole_article += string_item
 
         # make article simple
-        for item in content_of_article:
-            string_item = item.find_all(text=True)
-
-            try:
-                string_item.remove('\n')
-                string_item.remove( '\n')
-            except :
-                pass
-
-            string_item[0]=string_item[0]+"."
-
-            real_content_num = 0
-            remove_string = ""
-            for i in range(0,len(string_item)) :
-                if "추천해요" in string_item[i] :
-                    real_content_num+= i
-                if "©" in string_item[i] :
-                    remove_string=string_item[i]
-                    real_content_num-= 1
-
-            try :
-                string_item.remove(remove_string)
-            except :
-                pass
-
-            whole_article = " ".join(string_item[:real_content_num -1])
-            whole_article = whole_article.replace("\n","")
-            whole_article = whole_article.replace("\r","")
-
-
-        # make article exception > photo news
-        if whole_article:
-            if "크게보기" not in whole_article:
-                if len(whole_article) > 100:
+        split_article = whole_article.split('추천해요')
+        article_text_1 = str(split_article[0])
+        article_text_2 = str(article_text_1[7:])
+        if article_text_2:
+            if "크게보기" not in article_text_2:
+                if len(article_text_2) > 100:
                     result_list.append(URL)
-                    result_list.append(whole_article)
-                    keyword(whole_article, result_list)
+
+                    # replace unnecessary words in article
+                    real_article = article_text_2.replace("\'", "")
+                    real_article = real_article.replace(",", "")
+                    real_article = real_article.replace("\\n", "")
+                    real_article = real_article.replace("\\r", "")
+
+                    result_list.append(real_article)
+
+                    keyword(real_article, result_list)
         result_list.clear()
 
 
@@ -161,19 +144,25 @@ def keyword(article_text, result_list):
     news.keyword3 = result_list[4]
     news.save()
 
-    # conn.commit()
-
     result_list.clear()
 
 
 
 # main func
 def main():
-    page_num = 500
-    URL = URL_BEFORE_PAGE_NUM + URL_AFTER_PAGE_NUM
-    result_list = []
-    get_link_from_news_title(page_num, URL, result_list)
-    # conn.close()
+    while 1 :
+        page_num = 10
+        URL = URL_BEFORE_PAGE_NUM + URL_AFTER_PAGE_NUM
+        result_list = []
+
+        # make recent DB url_list
+        url_list = []
+        newses = News.objects.order_by('-id')[:200]
+        url_list = [news.url for news in newses]
+
+        get_link_from_news_title(page_num, URL, result_list, url_list)
+
+        time.sleep(600)
 
 
 if __name__ == '__main__':
